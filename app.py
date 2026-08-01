@@ -115,6 +115,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "
 
 with tab1:
     st.header("試合設定")
+    st.session_state.game_date = st.date_input("📅 試合日")
     st.subheader("📋 スタメン設定")
     st.write("今日の打者数とメンバーを設定してね。")
     new_num = st.number_input("今日の打者数", min_value=9, max_value=15, value=st.session_state.num_batters)
@@ -324,7 +325,7 @@ with tab3:
 
             st.divider()
             csv = latest_df.to_csv(index=False).encode('utf-8-sig')
-            st.download_button("📥 打席記録をダウンロード (CSV形式)", data=csv, file_name="batter_log.csv", mime="text/csv", type="primary")
+            st.download_button("📥 打席記録をダウンロード (CSV形式)", data=csv, file_name=f"batter_log_{st.session_state.game_date}.csv", mime="text/csv", type="primary")
 
 with tab4:
     st.header("投手成績の記録")
@@ -392,4 +393,4 @@ with tab4:
             st.rerun()
 
         csv_p = pd.DataFrame(st.session_state.pitcher_log).to_csv(index=False).encode('utf-8-sig')
-        st.download_button("📥 投手成績をダウンロード (CSV形式)", data=csv_p, file_name="pitcher_log.csv", mime="text/csv")
+        st.download_button("📥 投手成績をダウンロード (CSV形式)", data=csv_p, file_name=f"pitcher_log_{st.session_state.game_date}.csv", mime="text/csv")

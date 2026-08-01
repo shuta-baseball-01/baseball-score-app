@@ -121,9 +121,12 @@ with tab1:
     if new_num != st.session_state.num_batters:
         st.session_state.num_batters = new_num
         st.rerun()
-    lineup_cols = st.columns(3)
-    for i in range(st.session_state.num_batters):
-        lineup_cols[i % 3].text_input(f"{i+1}番", key=f"input_lineup_{i}")
+    # 🌟 順番が崩れないように行ごとに列を作成
+    for i in range(0, st.session_state.num_batters, 3):
+        cols = st.columns(3)
+        for j in range(3):
+            if i + j < st.session_state.num_batters:
+                cols[j].text_input(f"{i+j+1}番", key=f"input_lineup_{i+j}")
     st.divider()
     st.subheader("⚙️ 状況修正")
     col_set1, col_set2 = st.columns(2)

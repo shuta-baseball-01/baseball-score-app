@@ -118,7 +118,7 @@ def process_play(result_text, is_out=False):
     try:
         sheet = get_sheet()
         row_data = [
-            str(st.session_state.game_date), # 試合日
+            str(st.session_state.game_date),
             log_entry["イニング"],
             log_entry["アウト"],
             log_entry["打席"],

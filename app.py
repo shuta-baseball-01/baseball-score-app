@@ -1,4 +1,23 @@
 import streamlit as st
+import json
+import gspread
+from google.oauth2.service_account import Credentials
+
+# スプレッドシート接続用の設定
+def get_sheet():
+    # Streamlitの金庫から鍵を取り出す
+    creds_dict = json.loads(st.secrets["google_creds"])
+    creds = Credentials.from_service_account_info(
+        creds_dict,
+        scopes=[
+            "https://www.googleapis.com/auth/spreadsheets",
+            "https://www.googleapis.com/auth/drive"
+        ]
+    )
+    gc = gspread.authorize(creds)
+    # ⚠️ ここがさっきスクショで見えていた、しゅーたのシートID！
+    SPREADSHEET_ID = "1BFNchRRwxRgYkeDPfdL-eiepJV5afv5I3ovWot6CS9s"
+    return gc.open_by_key(SPREADSHEET_ID).sheet1
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image, ImageDraw
 import os
@@ -95,7 +114,19 @@ def process_play(result_text, is_out=False):
         "結果": result_text
     }
     st.session_state.game_log.append(log_entry)
-
+　　 # 🌟 ここから追加：スプレッドシートに自動保存！
+    try:
+        sheet = get_sheet()
+        row_data = [
+            str(st.session_state.game_date), # 試合日
+            log_entry["イニング"],
+            log_entry["アウト"],
+            log_entry["打席"],
+            log_entry["結果"]
+        ]
+        sheet.append_row(row_data)
+    except Exception as e:
+        st.warning(f"スプレッドシートへの保存に失敗しました: {e}")
     st.toast(f"✅ 【{result_text}】 を記録しました！", icon="📝")
 
     if is_out:

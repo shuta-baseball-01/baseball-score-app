@@ -114,7 +114,7 @@ def process_play(result_text, is_out=False):
         "結果": result_text
     }
     st.session_state.game_log.append(log_entry)
-　　 # 🌟 ここから追加：スプレッドシートに自動保存！
+    # 🌟 ここから追加：スプレッドシートに自動保存！
     try:
         sheet = get_sheet()
         row_data = [

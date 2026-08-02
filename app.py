@@ -410,6 +410,27 @@ with tab4:
                     "四球": bb,
                     "死球": hbp
                 })
+# 🌟🌟ここから追加：投手シートに自動保存！🌟🌟
+                try:
+                    # 打者用の設定から大元のファイルを参照して、投手シートを指定するよ
+                    main_file = get_sheet().spreadsheet
+                    pitcher_sheet = main_file.worksheet("投手記録")
+                    
+                    p_row_data = [
+                        str(st.session_state.game_date), # 試合日
+                        p_name,                          # 投手名
+                        final_innings,                   # 投球回
+                        p_timing,                        # 記録タイミング
+                        runs,                            # 失点
+                        er,                              # 自責点
+                        so,                              # 奪三振
+                        bb,                              # 四球
+                        hbp                              # 死球
+                    ]
+                    pitcher_sheet.append_row(p_row_data)
+                except Exception as e:
+                    st.warning(f"スプレッドシート(投手記録)への保存に失敗しました: {e}")
+                # 🌟🌟ここまで追加🌟🌟                
                 st.success(f"✅ {p_name} 投手の成績（投球回: {final_innings}）を記録したよ！")
                 st.rerun()
             else:

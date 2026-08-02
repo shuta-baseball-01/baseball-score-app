@@ -99,7 +99,12 @@ def process_play(result_text, is_out=False):
     st.toast(f"✅ 【{result_text}】 を記録しました！", icon="📝")
 
     if is_out:
-        st.session_state.outs += 1
+        # 🌟 併殺打なら2アウト、それ以外なら1アウト増やす
+        if result_text == "併殺打":
+            st.session_state.outs += 2
+        else:
+            st.session_state.outs += 1
+
         if st.session_state.outs >= 3:
             st.session_state.outs = 0
             st.session_state.inning += 1
@@ -152,7 +157,7 @@ with tab2:
         st.metric(label="自チーム得点", value=f"{st.session_state.score} 点")
     with info_col:
         st.markdown(f"**現在: {st.session_state.inning}回{st.session_state.half}** ｜ **アウト: {st.session_state.outs}**")
-        current_batter_name = st.session_state[f"input_lineup_{st.session_state.batter_idx}"]
+        current_batter_name =st.session_state[f"input_lineup_{st.session_state.batter_idx}"]
         st.markdown(f"**打席: {st.session_state.batter_idx + 1}番・{current_batter_name} 選手**")
     with action_col:
         if st.button("🏃‍♂️ 得点 +1", type="primary", use_container_width=True):

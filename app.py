@@ -311,8 +311,9 @@ with tab2:
     if b5.button("振り逃げ"): process_play("振り逃げ", is_out=False)
 
 with tab3:
-    st.header("成績確認（打者プレイログ）")
-    # 🌟🌟 NEW: スプレッドシートからデータを復元するボタン 🌟🌟
+        st.header("成績確認（打者プレイログ）")
+        
+        # 🌟🌟 NEW: スプレッドシートからデータを復元するボタン 🌟🌟
         if st.button("🔄 スプレッドシートから今日の記録を復元する", type="primary"):
             try:
                 sheet = get_sheet()
@@ -341,52 +342,53 @@ with tab3:
             except Exception as e:
                 st.warning(f"データの復元に失敗しました: {e}")
         # 🌟🌟 ここまで 🌟🌟
-    if len(st.session_state.game_log) == 0:
-        st.info("まだ記録がありません。「試合記録」タブで結果を入力してみてね。")
-    else:
-        # 🌟 NEW: 打席履歴を直接編集・削除できる「データエディタ」に変更！
-        st.subheader("📋 今日の打席履歴（📝 セルをタップして直接修正・削除できるよ！）")
-        df = pd.DataFrame(st.session_state.game_log)
 
-        # ユーザーが編集できる表を表示
-        edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True, key="batter_editor")
+        if len(st.session_state.game_log) == 0:
+            st.info("まだ記録がありません。「試合記録」タブで結果を入力してみてね。")
+        else:
+            # 🌟 NEW: 打席履歴を直接編集・削除できる「データエディタ」に変更！
+            st.subheader("📋 今日の打席履歴（📝 セルをタップして直接修正・削除できるよ！）")
+            df = pd.DataFrame(st.session_state.game_log)
 
-        # 修正を確定するボタン
-        if st.button("🔄 履歴の修正を確定して成績を再計算", type="secondary"):
-            st.session_state.game_log = edited_df.to_dict('records')
-            st.toast("✅ 打席履歴を修正しました！")
-            st.rerun()
+            # ユーザーが編集できる表を表示
+            edited_df = st.data_editor(df, num_rows="dynamic", use_container_width=True, key="batter_editor")
 
-        st.divider()
-        st.subheader("🏆 今日の個人成績一覧")
-        # 成績計算は、修正後の最新データ（st.session_state.game_log）を使って行う
-        latest_df = pd.DataFrame(st.session_state.game_log)
-        if not latest_df.empty:
-            latest_df["選手名"] = latest_df["打席"].apply(lambda x: x.split("・")[1] if isinstance(x, str) and "・" in x else x)
-            stats_list = []
-            for name, group in latest_df.groupby("選手名", sort=False):
-                st_pa = len(group)
-                st_ab = 0
-                st_hits = 0
-                for res in group["結果"]:
-                    if "安" in res or "二塁打" in res or "三塁打" in res or "本塁打" in res or res == "単打":
-                        st_ab += 1
-                        st_hits += 1
-                    elif res in ["四球", "死球", "四死球"]:
-                        pass
-                    else:
-                        st_ab += 1
-                avg_str = ".000"
-                if st_ab > 0:
-                    st_avg = st_hits / st_ab
-                    if st_avg == 1.0: avg_str = "1.000"
-                    else: avg_str = f"{st_avg:.3f}"[1:]
-                stats_list.append({
-                    "選手名": name, "打席数": st_pa, "打数": st_ab, "安打数": st_hits, "打率": avg_str
-                })
-            stats_df = pd.DataFrame(stats_list)
-            stats_df.index = range(1, len(stats_df) + 1)
-            st.dataframe(stats_df, use_container_width=True)
+            # 修正を確定するボタン
+            if st.button("🔄 履歴の修正を確定して成績を再計算", type="secondary"):
+                st.session_state.game_log = edited_df.to_dict('records')
+                st.toast("✅ 打席履歴を修正しました！")
+                st.rerun()
+
+            st.divider()
+            st.subheader("🏆 今日の個人成績一覧")
+            # 成績計算は、修正後の最新データ（st.session_state.game_log）を使って行う
+            latest_df = pd.DataFrame(st.session_state.game_log)
+            if not latest_df.empty:
+                latest_df["選手名"] = latest_df["打席"].apply(lambda x: x.split("・")[1] if isinstance(x, str) and "・" in x else x)
+                stats_list = []
+                for name, group in latest_df.groupby("選手名", sort=False):
+                    st_pa = len(group)
+                    st_ab = 0
+                    st_hits = 0
+                    for res in group["結果"]:
+                        if "安" in res or "二塁打" in res or "三塁打" in res or "本塁打" in res or res == "単打":
+                            st_ab += 1
+                            st_hits += 1
+                        elif res in ["四球", "死球", "四死球"]:
+                            pass
+                        else:
+                            st_ab += 1
+                    avg_str = ".000"
+                    if st_ab > 0:
+                        st_avg = st_hits / st_ab
+                        if st_avg == 1.0: avg_str = "1.000"
+                        else: avg_str = f"{st_avg:.3f}"[1:]
+                    stats_list.append({
+                        "選手名": name, "打席数": st_pa, "打数": st_ab, "安打数": st_hits, "打率": avg_str
+                    })
+                stats_df = pd.DataFrame(stats_list)
+                stats_df.index = range(1, len(stats_df) + 1)
+                st.dataframe(stats_df, use_container_width=True)
 
             st.divider()
             csv = latest_df.to_csv(index=False).encode('utf-8-sig')

@@ -152,6 +152,10 @@ tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "
 with tab1:
     st.header("試合設定")
     st.session_state.game_date = st.date_input("📅 試合日")
+    # 🌟🌟 NEW: 試合名の入力欄を追加 🌟🌟
+    if "game_name" not in st.session_state:
+        st.session_state.game_name = "1試合目"
+    st.session_state.game_name = st.text_input("📝 試合名・チーム名（例：1試合目、Aチーム など）", st.session_state.game_name)
     st.subheader("📋 スタメン設定")
     st.write("今日の打者数とメンバーを設定してね。")
     new_num = st.number_input("今日の打者数", min_value=9, max_value=15, value=st.session_state.num_batters)
@@ -317,22 +321,20 @@ with tab3:
         if st.button("🔄 スプレッドシートから今日の記録を復元する", type="primary"):
             try:
                 sheet = get_sheet()
-                # スプレッドシートのすべての行データを取得
                 all_data = sheet.get_all_values() 
                 today_str = str(st.session_state.game_date)
+                target_game = st.session_state.game_name # 🌟 追加：探す試合名
                 
                 restored_log = []
                 for row in all_data:
-                    # A列（インデックス0）が今日の試合日と一致する行だけを抽出
-                    if len(row) >= 5 and row[0] == today_str:
+                    # 🌟 変更：日付(row[0]) と 試合名(row[5]) が両方一致する行だけを抽出！
+                    if len(row) >= 6 and row[0] == today_str and row[5] == target_game:
                         restored_log.append({
                             "イニング": row[1],
                             "アウト": row[2],
                             "打席": row[3],
                             "結果": row[4]
                         })
-                
-                # 復元できたかどうかでメッセージを変える
                 if len(restored_log) > 0:
                     st.session_state.game_log = restored_log
                     st.success(f"✅ スプレッドシートから今日の記録を {len(restored_log)} 件、無事に復元したよ！")

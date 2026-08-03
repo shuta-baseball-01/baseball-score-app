@@ -122,7 +122,7 @@ def process_play(result_text, is_out=False):
             log_entry["イニング"],
             log_entry["アウト"],
             log_entry["打席"],
-            log_entry["結果"]
+            log_entry["結果"],
             st.session_state.game_name       # 🌟🌟ここに追加！試合名も一緒に送るよ🌟🌟
         ]
         sheet.append_row(row_data)

@@ -312,6 +312,35 @@ with tab2:
 
 with tab3:
     st.header("成績確認（打者プレイログ）")
+    # 🌟🌟 NEW: スプレッドシートからデータを復元するボタン 🌟🌟
+        if st.button("🔄 スプレッドシートから今日の記録を復元する", type="primary"):
+            try:
+                sheet = get_sheet()
+                # スプレッドシートのすべての行データを取得
+                all_data = sheet.get_all_values() 
+                today_str = str(st.session_state.game_date)
+                
+                restored_log = []
+                for row in all_data:
+                    # A列（インデックス0）が今日の試合日と一致する行だけを抽出
+                    if len(row) >= 5 and row[0] == today_str:
+                        restored_log.append({
+                            "イニング": row[1],
+                            "アウト": row[2],
+                            "打席": row[3],
+                            "結果": row[4]
+                        })
+                
+                # 復元できたかどうかでメッセージを変える
+                if len(restored_log) > 0:
+                    st.session_state.game_log = restored_log
+                    st.success(f"✅ スプレッドシートから今日の記録を {len(restored_log)} 件、無事に復元したよ！")
+                else:
+                    st.info("スプレッドシートには、まだ今日の記録がないみたい。")
+                    
+            except Exception as e:
+                st.warning(f"データの復元に失敗しました: {e}")
+        # 🌟🌟 ここまで 🌟🌟
     if len(st.session_state.game_log) == 0:
         st.info("まだ記録がありません。「試合記録」タブで結果を入力してみてね。")
     else:

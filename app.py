@@ -459,6 +459,7 @@ with tab4:
                         so,                              # 奪三振
                         bb,                              # 四球
                         hbp                              # 死球
+                        st.session_state.game_name       # 🌟 投手側にも追加！
                     ]
                     pitcher_sheet.append_row(p_row_data)
                 except Exception as e:

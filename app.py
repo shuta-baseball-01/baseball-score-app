@@ -28,7 +28,7 @@ st.set_page_config(page_title="草野球記録アプリ", layout="wide", initial
 # 🌟 ここから追加：パワプロ風ボタンとグラウンド縮小の魔法（CSS）
 st.markdown("""
 <style>
-/* ① ボタンをゲームっぽく「角丸＆ぷっくり」させる */
+/* ① ボタンをゲームっぽく「角丸＆ぷっくり」させる（全ボタン共通） */
 .stButton > button {
     border-radius: 25px !important;
     font-weight: bold !important;
@@ -44,7 +44,7 @@ st.markdown("""
 }
 
 /* ③ Primaryボタン（目立つボタン）は決定ボタン風の青色に！ */
-.stButton > button[kind="primary"] {
+button[data-testid="baseButton-primary"] {
     background-color: #1E88E5 !important;
     color: white !important;
     border: 2px solid #1565C0 !important;
@@ -52,7 +52,7 @@ st.markdown("""
 }
 
 /* ④ Primaryボタンを押した時の沈む動き */
-.stButton > button[kind="primary"]:active {
+button[data-testid="baseButton-primary"]:active {
     box-shadow: 0px 0px 0px #0D47A1 !important;
     transform: translateY(4px) !important;
 }
@@ -337,11 +337,8 @@ with tab2:
             st.write("💥 **ヒット（安打）**")
             hit_cols = st.columns(3)
             for i, hit_result in enumerate(hits):
-                # 🌟 ここで「本塁打」や「二塁打」などの特別なヒットは全部青くする！
-                is_major_hit = any(h in hit_result for h in ["安", "塁打", "本塁打"])
-                btn_type = "primary" if is_major_hit else "secondary"
-                
-                if hit_cols[i % 3].button(hit_result, key=f"btn_{hit_result}", type=btn_type):
+                # 🌟 keyの名前を変えて、システムに「新しいボタンだよ！」と認識させる
+                if hit_cols[i % 3].button(hit_result, key=f"btn_hit_new_{hit_result}", type="primary"): 
                     process_play(hit_result, is_out=False)
             st.write("⚠️ **その他**")
             col_err, col_cancel = st.columns(2)

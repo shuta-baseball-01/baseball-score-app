@@ -25,66 +25,46 @@ import math
 import pandas as pd
 
 st.set_page_config(page_title="草野球記録アプリ", layout="wide", initial_sidebar_state="collapsed")
-# 🌟 ここから追加：パワプロ風UIに変身させる魔法のデザイン（CSS）
-    st.markdown("""
-    <style>
-    /* ① アプリ全体の背景を「青空」みたいな爽やかな極薄い水色に */
-    [data-testid="stAppViewContainer"] {
-        background-color: #E8F0F8 !important;
-    }
+# 🌟 ここから追加：パワプロ風ボタンとグラウンド縮小の魔法（CSS）
+st.markdown("""
+<style>
+/* ① ボタンをゲームっぽく「角丸＆ぷっくり」させる */
+.stButton > button {
+    border-radius: 25px !important;
+    font-weight: bold !important;
+    border: 2px solid #E0E0E0 !important;
+    box-shadow: 0px 4px 0px #B0BEC5 !important;
+    transition: all 0.1s !important;
+}
 
-    /* ② ボタンをゲームっぽく「角丸＆ぷっくり」させる */
-    .stButton > button {
-        border-radius: 25px !important;
-        font-weight: bold !important;
-        border: 2px solid #E0E0E0 !important;
-        box-shadow: 0px 4px 0px #B0BEC5 !important;
-        transition: all 0.1s !important;
-    }
+/* ② ボタンを押した時に「ポチッ」と沈む動き */
+.stButton > button:active {
+    box-shadow: 0px 0px 0px #B0BEC5 !important;
+    transform: translateY(4px) !important;
+}
 
-    /* ③ ボタンを押した時に「ポチッ」と沈む動き */
-    .stButton > button:active {
-        box-shadow: 0px 0px 0px #B0BEC5 !important;
-        transform: translateY(4px) !important;
-    }
+/* ③ Primaryボタン（目立つボタン）は決定ボタン風の青色に！ */
+.stButton > button[kind="primary"] {
+    background-color: #1E88E5 !important;
+    color: white !important;
+    border: 2px solid #1565C0 !important;
+    box-shadow: 0px 4px 0px #0D47A1 !important;
+}
 
-    /* ④ Primaryボタン（目立つボタン）はパワプロの決定ボタン風の青色に！ */
-    .stButton > button[kind="primary"] {
-        background-color: #1E88E5 !important;
-        color: white !important;
-        border: 2px solid #1565C0 !important;
-        box-shadow: 0px 4px 0px #0D47A1 !important;
-    }
-    
-    /* ⑤ Primaryボタンを押した時の沈む動き */
-    .stButton > button[kind="primary"]:active {
-        box-shadow: 0px 0px 0px #0D47A1 !important;
-        transform: translateY(4px) !important;
-    }
+/* ④ Primaryボタンを押した時の沈む動き */
+.stButton > button[kind="primary"]:active {
+    box-shadow: 0px 0px 0px #0D47A1 !important;
+    transform: translateY(4px) !important;
+}
 
-    /* ⑥ スマホの画面幅に合わせて画像を自動縮小する魔法 */
-    [data-testid="stIm<style>
-    /* ① ボタンをゲームっぽく角丸にする */
-    .stButton > button {
-        border-radius: 20px !important;
-        font-weight: bold !important;
-        border: 2px solid #E0E0E0 !important;
-        box-shadow: 0px 3px 0px #B0BEC5 !important;
-    }
-    
-    /* ② スマホではみ出さないように、グラウンド全体を85%に縮小表示する */
-    iframe[title="streamlit_image_coordinates.streamlit_image_coordinates"] {
-        transform: scale(0.85);
-        transform-origin: top left;
-    }
-    </style>
-    """, unsafe_allow_html=True)age"] img, canvas {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    # 🌟 追加ここまで
+/* ⑤ スマホではみ出さないように、グラウンド全体を85%に縮小表示する */
+iframe[title="streamlit_image_coordinates.streamlit_image_coordinates"] {
+    transform: scale(0.85);
+    transform-origin: top left;
+}
+</style>
+""", unsafe_allow_html=True)
+# 🌟 追加ここまで
 
 # --- 🎨 グラウンド描画 ---
 def create_and_save_field():

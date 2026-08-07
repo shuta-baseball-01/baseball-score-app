@@ -44,7 +44,7 @@ st.markdown("""
 }
 
 /* ③ Primaryボタン（目立つボタン）は決定ボタン風の青色に！ */
-button[data-testid="baseButton-primary"] {
+.stButton > button[kind="primary"] {
     background-color: #1E88E5 !important;
     color: white !important;
     border: 2px solid #1565C0 !important;
@@ -52,7 +52,7 @@ button[data-testid="baseButton-primary"] {
 }
 
 /* ④ Primaryボタンを押した時の沈む動き */
-button[data-testid="baseButton-primary"]:active {
+.stButton > button[kind="primary"]:active {
     box-shadow: 0px 0px 0px #0D47A1 !important;
     transform: translateY(4px) !important;
 }
@@ -337,8 +337,8 @@ with tab2:
             st.write("💥 **ヒット（安打）**")
             hit_cols = st.columns(3)
             for i, hit_result in enumerate(hits):
-                # 🌟 keyの名前を変えて、システムに「新しいボタンだよ！」と認識させる
-                if hit_cols[i % 3].button(hit_result, key=f"btn_hit_new_{hit_result}", type="primary"): 
+                # 🌟 type="primary" をつけて、青く光らせる！
+                if hit_cols[i % 3].button(hit_result, key=f"btn_hit_{hit_result}", type="primary"):
                     process_play(hit_result, is_out=False)
             st.write("⚠️ **その他**")
             col_err, col_cancel = st.columns(2)

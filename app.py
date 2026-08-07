@@ -25,6 +25,45 @@ import math
 import pandas as pd
 
 st.set_page_config(page_title="草野球記録アプリ", layout="wide", initial_sidebar_state="collapsed")
+# 🌟 ここから追加：パワプロ風UIに変身させる魔法のデザイン（CSS）
+    st.markdown("""
+    <style>
+    /* ① アプリ全体の背景を「青空」みたいな爽やかな極薄い水色に */
+    .stApp {
+        background-color: #E8F0F8;
+    }
+
+    /* ② ボタンをゲームっぽく「角丸＆ぷっくり」させる */
+    .stButton > button {
+        border-radius: 25px !important; /* 角をめっちゃ丸く */
+        font-weight: bold !important;   /* 文字を太く */
+        border: 2px solid #E0E0E0 !important; /* 優しい枠線 */
+        box-shadow: 0px 4px 0px #B0BEC5 !important; /* ぷっくりとした影 */
+        transition: all 0.1s !important; /* 押した時のアニメーション速度 */
+    }
+
+    /* ③ ボタンを押した時に「ポチッ」と沈む動き */
+    .stButton > button:active {
+        box-shadow: 0px 0px 0px #B0BEC5 !important;
+        transform: translateY(4px) !important;
+    }
+
+    /* ④ Primaryボタン（目立たせるボタン）はパワプロの決定ボタン風の青色に！ */
+    .stButton > button[kind="primary"] {
+        background-color: #1E88E5 !important;
+        color: white !important;
+        border: 2px solid #1565C0 !important;
+        box-shadow: 0px 4px 0px #0D47A1 !important;
+    }
+    
+    /* ⑤ Primaryボタンを押した時の沈む動き */
+    .stButton > button[kind="primary"]:active {
+        box-shadow: 0px 0px 0px #0D47A1 !important;
+        transform: translateY(4px) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    # 🌟 追加ここまで
 
 # --- 🎨 グラウンド描画 ---
 def create_and_save_field():

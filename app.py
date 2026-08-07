@@ -63,7 +63,22 @@ st.set_page_config(page_title="草野球記録アプリ", layout="wide", initial
     }
 
     /* ⑥ スマホの画面幅に合わせて画像を自動縮小する魔法 */
-    [data-testid="stImage"] img, canvas {
+    [data-testid="stIm<style>
+    /* ① ボタンをゲームっぽく角丸にする */
+    .stButton > button {
+        border-radius: 20px !important;
+        font-weight: bold !important;
+        border: 2px solid #E0E0E0 !important;
+        box-shadow: 0px 3px 0px #B0BEC5 !important;
+    }
+    
+    /* ② スマホではみ出さないように、グラウンド全体を85%に縮小表示する */
+    iframe[title="streamlit_image_coordinates.streamlit_image_coordinates"] {
+        transform: scale(0.85);
+        transform-origin: top left;
+    }
+    </style>
+    """, unsafe_allow_html=True)age"] img, canvas {
         max-width: 100% !important;
         height: auto !important;
     }

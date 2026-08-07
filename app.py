@@ -337,7 +337,7 @@ with tab2:
             st.write("💥 **ヒット（安打）**")
             hit_cols = st.columns(3)
             for i, hit_result in enumerate(hits):
-                if hit_cols[i % 3].button(hit_result, key=f"btn_{hit_result}"): process_play(hit_result, is_out=False)
+                if hit_cols[i % 3].button(hit_result, key=f"btn_{hit_result}", type="primary"): process_play(hit_result, is_out=False)
 
             st.write("⚠️ **その他**")
             col_err, col_cancel = st.columns(2)

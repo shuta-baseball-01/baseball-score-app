@@ -264,7 +264,7 @@ with tab2:
 
     with left_col:
         st.write("👇 打球が飛んだ方向をタップ！")
-        value = streamlit_image_coordinates("field.png", key="baseball_field")
+        value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
         if value is not None and value != st.session_state.last_tap_value:
             st.session_state.last_tap_value = value

@@ -337,8 +337,12 @@ with tab2:
             st.write("💥 **ヒット（安打）**")
             hit_cols = st.columns(3)
             for i, hit_result in enumerate(hits):
-                if hit_cols[i % 3].button(hit_result, key=f"btn_{hit_result}", type="primary"): process_play(hit_result, is_out=False)
-
+                # 🌟 ここで「本塁打」や「二塁打」などの特別なヒットは全部青くする！
+                is_major_hit = any(h in hit_result for h in ["安", "塁打", "本塁打"])
+                btn_type = "primary" if is_major_hit else "secondary"
+                
+                if hit_cols[i % 3].button(hit_result, key=f"btn_{hit_result}", type=btn_type):
+                    process_play(hit_result, is_out=False)
             st.write("⚠️ **その他**")
             col_err, col_cancel = st.columns(2)
             if col_err.button("エラー (失策)"): process_play("エラー", is_out=False)

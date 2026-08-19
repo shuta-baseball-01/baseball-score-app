@@ -298,9 +298,11 @@ with tab2:
             st.button("決定", type="primary", use_container_width=True, on_click=apply_pinch_hitter)
 
     st.divider()
-    left_col, right_col = st.columns([1, 1])
+    
+    # 🌟 グラウンドを真ん中に大きく表示するために、カラムを少し調整
+    left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
-    with left_col:
+    with center_col:
         st.write("👇 打球が飛んだ方向をタップ！")
         value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
@@ -347,48 +349,13 @@ with tab2:
                     elif angle <= 22: pos = "右中間（フェンス際）"
                     else: pos = "ライトオーバー"
 
+            # タップされた位置を記録して、画面を更新！
             st.session_state.tapped_pos = pos
-            st.rerun()
+            st.rerun() 
 
-    with right_col:
-        pos = st.session_state.tapped_pos
-        if pos is None:
-            st.info("👈 まずはグラウンドの打球位置をタップしてください。")
-        else:
-            st.success(f"📍 **{pos}** への打球ですね！結果は？")
-            outs = []
-            hits = []
-
-            if any(w in pos for w in ["レフト", "センター", "ライト", "左中間", "右中間"]):
-                if "レフト" in pos or "左中間" in pos: outs, hits = ["左直", "左飛"], ["左安", "左越二塁打", "左越三塁打", "本塁打"]
-                elif "センター" in pos: outs, hits = ["中直", "中飛"], ["中安", "中越二塁打", "中越三塁打", "本塁打"]
-                elif "ライト" in pos or "右中間" in pos: outs, hits = ["右直", "右飛"], ["右安", "右越二塁打", "右越三塁打", "本塁打"]
-            elif "キャッチャー" in pos: outs, hits = ["捕ゴロ", "捕直", "捕飛","併殺打"], ["内野安打"]
-            elif "ピッチャー" in pos: outs, hits = ["投ゴロ", "投直", "投飛","併殺打"], ["内野安打", "中安"]
-            elif "ショート" in pos: outs, hits = ["遊ゴロ", "三ゴロ", "遊直", "三直", "遊飛", "三飛","併殺打"], ["左安", "内野安打"]
-            elif "セカンド" in pos: outs, hits = ["二ゴロ", "一ゴロ", "二直", "一直", "二飛", "一飛","併殺打"], ["右安", "内野安打"]
-            elif "二遊間" in pos: outs, hits = ["遊ゴロ", "二ゴロ", "遊直", "二直", "遊飛", "二飛","併殺打"], ["中安", "内野安打"]
-            elif "サード" in pos: outs, hits = ["三ゴロ", "三直", "三飛","併殺打"], ["左安", "内野安打"]
-            elif "ファースト" in pos: outs, hits = ["一ゴロ", "一直", "一飛","併殺打"], ["右安", "内野安打"]
-            else: outs, hits = ["ゴロ", "ライナー", "フライ"], ["単打", "二塁打", "三塁打", "本塁打"]
-
-            st.write("⚾ **アウト（凡打）**")
-            out_cols = st.columns(3)
-            for i, out_result in enumerate(outs):
-                if out_cols[i % 3].button(out_result, key=f"btn_{out_result}"): process_play(out_result, is_out=True)
-
-            st.write("💥 **ヒット（安打）**")
-            hit_cols = st.columns(3)
-            for i, hit_result in enumerate(hits):
-                # 🌟 type="primary" をつけて、青く光らせる！
-                if hit_cols[i % 3].button(hit_result, key=f"btn_hit_{hit_result}", type="primary"):
-                    process_play(hit_result, is_out=False)
-            st.write("⚠️ **その他**")
-            col_err, col_cancel = st.columns(2)
-            if col_err.button("エラー (失策)"): process_play("エラー", is_out=False)
-            if col_cancel.button("↩️ タップ位置をやり直す"):
-                st.session_state.tapped_pos = None
-                st.rerun()
+    # 🌟 もしタップ位置が記録されていたら、ポップアップウインドウをドーンと表示！
+    if st.session_state.tapped_pos is not None:
+        input_result_dialog(st.session_state.tapped_pos)
 
     st.divider()
     st.write("【インフィールド外・その他の結果】")

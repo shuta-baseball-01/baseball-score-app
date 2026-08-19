@@ -351,11 +351,7 @@ with tab2:
 
             # タップされた位置を記録して、画面を更新！
             st.session_state.tapped_pos = pos
-            st.rerun() 
-
-    # 🌟 もしタップ位置が記録されていたら、ポップアップウインドウをドーンと表示！
-    if st.session_state.tapped_pos is not None:
-        input_result_dialog(st.session_state.tapped_pos)
+            input_result_dialog(pos)
 
     st.divider()
     st.write("【インフィールド外・その他の結果】")

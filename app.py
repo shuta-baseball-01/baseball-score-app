@@ -187,6 +187,49 @@ def process_play(result_text, is_out=False):
     st.session_state.show_sub_menu = False
     st.rerun()
 
+# 🌟 ここから追加：タップした時にウインドウを出す魔法の関数
+@st.experimental_dialog("打球結果を入力", width="large")
+def input_result_dialog(pos):
+    st.success(f"📍 **{pos}** への打球ですね！結果は？")
+    outs = []
+    hits = []
+
+    if any(w in pos for w in ["レフト", "センター", "ライト", "左中間", "右中間"]):
+        if "レフト" in pos or "左中間" in pos: outs, hits = ["左直", "左飛"], ["左安", "左越二塁打", "左越三塁打", "本塁打"]
+        elif "センター" in pos: outs, hits = ["中直", "中飛"], ["中安", "中越二塁打", "中越三塁打", "本塁打"]
+        elif "ライト" in pos or "右中間" in pos: outs, hits = ["右直", "右飛"], ["右安", "右越二塁打", "右越三塁打", "本塁打"]
+    elif "キャッチャー" in pos: outs, hits = ["捕ゴロ", "捕直", "捕飛","併殺打"], ["内野安打"]
+    elif "ピッチャー" in pos: outs, hits = ["投ゴロ", "投直", "投飛","併殺打"], ["内野安打", "中安"]
+    elif "ショート" in pos: outs, hits = ["遊ゴロ", "三ゴロ", "遊直", "三直", "遊飛", "三飛","併殺打"], ["左安", "内野安打"]
+    elif "セカンド" in pos: outs, hits = ["二ゴロ", "一ゴロ", "二直", "一直", "二飛", "一飛","併殺打"], ["右安", "内野安打"]
+    elif "二遊間" in pos: outs, hits = ["遊ゴロ", "二ゴロ", "遊直", "二直", "遊飛", "二飛","併殺打"], ["中安", "内野安打"]
+    elif "サード" in pos: outs, hits = ["三ゴロ", "三直", "三飛","併殺打"], ["左安", "内野安打"]
+    elif "ファースト" in pos: outs, hits = ["一ゴロ", "一直", "一飛","併殺打"], ["右安", "内野安打"]
+    else: outs, hits = ["ゴロ", "ライナー", "フライ"], ["単打", "二塁打", "三塁打", "本塁打"]
+
+    st.write("⚾ **アウト（凡打）**")
+    out_cols = st.columns(3)
+    for i, out_result in enumerate(outs):
+        if out_cols[i % 3].button(out_result, key=f"dlg_out_{out_result}"): 
+            process_play(out_result, is_out=True)
+
+    st.write("💥 **ヒット（安打）**")
+    hit_cols = st.columns(3)
+    for i, hit_result in enumerate(hits):
+        if hit_cols[i % 3].button(hit_result, key=f"dlg_hit_{hit_result}", type="primary"): 
+            process_play(hit_result, is_out=False)
+
+    st.write("⚠️ **その他**")
+    col_err, col_cancel = st.columns(2)
+    if col_err.button("エラー (失策)", key="dlg_err"): 
+        process_play("エラー", is_out=False)
+        
+    # 🌟 ここがしゅーたの欲しかった「キャンセル機能」！
+    if col_cancel.button("↩️ キャンセル（やり直す）", key="dlg_cancel"):
+        st.session_state.tapped_pos = None
+        st.rerun()
+# 🌟 追加ここまで
+
 st.title("⚾ 草野球スコアキーパー")
 tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "📊 打者成績", "⚾ 投手成績"])
 

@@ -347,7 +347,7 @@ left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 with center_col:
         # 🌟 文字も強制的に真ん中寄せにする！
         st.markdown("<p style='text-align: center; font-weight: bold;'>👇 打球が飛んだ方向をタップ！</p>", unsafe_allow_html=True)
-        value = streamlit_image_coordinates("field.png", key="baseball_field", width=400)
+        value = streamlit_image_coordinates("field.png", key="baseball_field", width=380)
 
         if value is not None and value != st.session_state.get("last_tap_value"):
             st.session_state.last_tap_value = value

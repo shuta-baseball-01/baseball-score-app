@@ -296,9 +296,9 @@ with tab2:
             st.write("")
             st.button("決定", type="primary", use_container_width=True, on_click=apply_pinch_hitter)
 
-       st.divider()
+st.divider()
 
-　　　　left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
+    left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
     with center_col:
         st.write("👇 打球が飛んだ方向をタップ！")
@@ -347,14 +347,14 @@ with tab2:
                     elif angle <= 22: pos = "右中間（フェンス際）"
                     else: pos = "ライトオーバー"
 
-            # 🌟 タップした位置を記録！
-            st.session_state.tapped_pos = pos
+                # 🌟 タップした位置を記録！
+                st.session_state.tapped_pos = pos
 
-    # 🌟 ここが超重要！ with center_col の「外」に出すために、左端にピタッと合わせる！
+# ここから下が「with center_col:」の外側にくるように、左端にピタッと寄せて！
     st.write(f"👀 確認用: {st.session_state.get('tapped_pos')}")
     if st.session_state.get("tapped_pos") is not None:
         input_result_dialog(st.session_state.tapped_pos)
-
+        
     st.divider()
     st.write("【インフィールド外・その他の結果】")
     b1, b2, b3, b4, b5 = st.columns(5)

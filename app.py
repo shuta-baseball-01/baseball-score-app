@@ -229,23 +229,48 @@ def input_result_dialog(pos):
         st.session_state.tapped_pos = None
         st.rerun()
         
-# 🌟 st.title(...) を消して、これに入れ替える！
-st.markdown("<h3 style='text-align: center; white-space: nowrap;'>⚾ 草野球スコアキーパー</h3>", unsafe_allow_html=True)
-
-# 🌟 タイトルのすぐ下にこれをドン！と追加してね！
+# 🌟 タイトルとグラウンドのデザインを強制する最強の魔法！
 st.markdown("""
 <style>
-    /* グラウンドの透明な枠組みごと、強制的にど真ん中に押し込む！ */
-    div[data-testid="stCustomComponentV1"] {
-        display: flex !important;
-        justify-content: center !important;
+    /* ① タイトルをスマホ画面に合わせて自動縮小し、絶対に1行に収める！ */
+    .title-text {
+        text-align: center;
+        font-size: clamp(16px, 6.5vw, 28px) !important;
+        font-weight: bold;
+        white-space: nowrap !important;
+        margin-bottom: 20px;
     }
+    
+    /* ② スマホ画面でも、グラウンドの左右の「見えない壁」を無理やり維持して真ん中に挟み込む！ */
+    @media (max-width: 640px) {
+        /* グラウンドがある横並びブロックを強制的に横並び（row）にする */
+        div[data-testid="stHorizontalBlock"]:has(iframe) {
+            flex-direction: row !important;
+        }
+        /* 左右の壁（1番目と3番目の枠）を15%の幅で維持する */
+        div[data-testid="stHorizontalBlock"]:has(iframe) > div:nth-child(1),
+        div[data-testid="stHorizontalBlock"]:has(iframe) > div:nth-child(3) {
+            display: block !important;
+            width: 15% !important;
+            flex: 1 1 15% !important;
+        }
+        /* 真ん中のグラウンドを70%の幅で中央に配置する */
+        div[data-testid="stHorizontalBlock"]:has(iframe) > div:nth-child(2) {
+            display: block !important;
+            width: 70% !important;
+            flex: 1 1 70% !important;
+        }
+    }
+    
+    /* 念押しの画像中央寄せ */
     iframe {
         margin: 0 auto !important;
         display: block !important;
     }
 </style>
+<div class="title-text">⚾ 草野球スコアキーパー</div>
 """, unsafe_allow_html=True)
+
 tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "📊 打者成績", "⚾ 投手成績"])
 
 with tab1:

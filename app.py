@@ -300,7 +300,7 @@ st.divider()
 
 left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
-    with center_col:
+with center_col:
         st.write("👇 打球が飛んだ方向をタップ！")
         value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 

@@ -229,21 +229,20 @@ def input_result_dialog(pos):
         st.session_state.tapped_pos = None
         st.rerun()
         
-st.title("⚾ 草野球スコアキーパー")
+# 🌟 st.title(...) を消して、これに入れ替える！
+st.markdown("<h3 style='text-align: center; white-space: nowrap;'>⚾ 草野球スコアキーパー</h3>", unsafe_allow_html=True)
 
-# 🌟 ここから追加：スマホ画面を綺麗にするCSS魔法
+# 🌟 タイトルのすぐ下にこれをドン！と追加してね！
 st.markdown("""
 <style>
-    /* タイトルの改行（ーが落ちるの）を防いで中央に！ */
-    h1 {
-        font-size: 22px !important;
-        white-space: nowrap !important;
-        text-align: center !important;
+    /* グラウンドの透明な枠組みごと、強制的にど真ん中に押し込む！ */
+    div[data-testid="stCustomComponentV1"] {
+        display: flex !important;
+        justify-content: center !important;
     }
-    /* グラウンドの画像を強制的にど真ん中に配置！ */
     iframe {
-        display: block !important;
         margin: 0 auto !important;
+        display: block !important;
     }
 </style>
 """, unsafe_allow_html=True)

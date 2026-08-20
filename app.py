@@ -350,49 +350,49 @@ with center_col:
         value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
         if value is not None and value != st.session_state.get("last_tap_value"):
-        st.session_state.last_tap_value = value
-        x, y = value['x'], value['y']
-        hx, hy = 200, 350
-        dx, dy = x - hx, hy - y
-        distance = math.sqrt(dx**2 + dy**2)
-        angle = math.degrees(math.atan2(dx, dy)) if dy != 0 else 90
-        dynamic_r3 = 190 + 35 * math.cos(math.radians(angle * 2))
+            st.session_state.last_tap_value = value
+            x, y = value['x'], value['y']
+            hx, hy = 200, 350
+            dx, dy = x - hx, hy - y
+            distance = math.sqrt(dx**2 + dy**2)
+            angle = math.degrees(math.atan2(dx, dy)) if dy != 0 else 90
+            dynamic_r3 = 190 + 35 * math.cos(math.radians(angle * 2))
 
-        pos = "エラー"
-        if dy < 0: pos = "バックネット裏"
-        elif angle < -45 or angle > 45: pos = "ファウルゾーン"
-        else:
-            if distance < 40: pos = "キャッチャー周辺"
-            elif 40 <= distance < 110:
-                if angle < -30: pos = "サード前"
-                elif angle <= 30: pos = "ピッチャー周辺"
-                else: pos = "ファースト前"
-            elif 110 <= distance < dynamic_r3:
-                if angle < -30: pos = "サード周辺"
-                elif angle < -8: pos = "ショート周辺"
-                elif angle <= 8: pos = "二遊間周辺"
-                elif angle <= 30: pos = "セカンド周辺"
-                else: pos = "ファースト周辺"
-            elif dynamic_r3 <= distance < 250:
-                if angle < -22: pos = "レフト前（サード後方）"
-                elif angle < -12: pos = "レフト前（ショート後方）"
-                elif angle <= 12: pos = "センター前（二遊間後方）"
-                elif angle <= 22: pos = "ライト前（セカンド後方）"
-                else: pos = "ライト前（ファースト後方）"
-            elif 250 <= distance < 340:
-                if angle < -22: pos = "レフト定位置"
-                elif angle < -12: pos = "左中間"
-                elif angle <= 12: pos = "センター定位置"
-                elif angle <= 22: pos = "右中間"
-                else: pos = "ライト定位置"
+            pos = "エラー"
+            if dy < 0: pos = "バックネット裏"
+            elif angle < -45 or angle > 45: pos = "ファウルゾーン"
             else:
-                if angle < -22: pos = "レフトオーバー"
-                elif angle < -12: pos = "左中間（フェンス際）"
-                elif angle <= 12: pos = "センターオーバー"
-                elif angle <= 22: pos = "右中間（フェンス際）"
-                else: pos = "ライトオーバー"
-
-        st.session_state.tapped_pos = pos
+                if distance < 40: pos = "キャッチャー周辺"
+                elif 40 <= distance < 110:
+                    if angle < -30: pos = "サード前"
+                    elif angle <= 30: pos = "ピッチャー周辺"
+                    else: pos = "ファースト前"
+                elif 110 <= distance < dynamic_r3:
+                    if angle < -30: pos = "サード周辺"
+                    elif angle < -8: pos = "ショート周辺"
+                    elif angle <= 8: pos = "二遊間周辺"
+                    elif angle <= 30: pos = "セカンド周辺"
+                    else: pos = "ファースト周辺"
+                elif dynamic_r3 <= distance < 250:
+                    if angle < -22: pos = "レフト前（サード後方）"
+                    elif angle < -12: pos = "レフト前（ショート後方）"
+                    elif angle <= 12: pos = "センター前（二遊間後方）"
+                    elif angle <= 22: pos = "ライト前（セカンド後方）"
+                    else: pos = "ライト前（ファースト後方）"
+                elif 250 <= distance < 340:
+                    if angle < -22: pos = "レフト定位置"
+                    elif angle < -12: pos = "左中間"
+                    elif angle <= 12: pos = "センター定位置"
+                    elif angle <= 22: pos = "右中間"
+                    else: pos = "ライト定位置"
+                else:
+                    if angle < -22: pos = "レフトオーバー"
+                    elif angle < -12: pos = "左中間（フェンス際）"
+                    elif angle <= 12: pos = "センターオーバー"
+                    elif angle <= 22: pos = "右中間（フェンス際）"
+                    else: pos = "ライトオーバー"
+    
+            st.session_state.tapped_pos = pos
 
 # 👇 ここから下は完全に外側（左端にピタッと合わせる）
 st.write(f"👀 確認用: {st.session_state.get('tapped_pos')}")

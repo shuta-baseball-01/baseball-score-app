@@ -535,3 +535,4 @@ with tab4:
 
         csv_p = pd.DataFrame(st.session_state.pitcher_log).to_csv(index=False).encode('utf-8-sig')
         st.download_button("📥 投手成績をダウンロード (CSV形式)", data=csv_p, file_name=f"pitcher_log_{st.session_state.game_date}.csv", mime="text/csv")
+

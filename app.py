@@ -349,7 +349,7 @@ with center_col:
         st.markdown("<p style='text-align: center; font-weight: bold;'>👇 打球が飛んだ方向をタップ！</p>", unsafe_allow_html=True)
         value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
-    if value is not None and value != st.session_state.get("last_tap_value"):
+        if value is not None and value != st.session_state.get("last_tap_value"):
         st.session_state.last_tap_value = value
         x, y = value['x'], value['y']
         hx, hy = 200, 350

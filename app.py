@@ -348,13 +348,13 @@ with tab2:
                     elif angle <= 22: pos = "右中間（フェンス際）"
                     else: pos = "ライトオーバー"
 
-            # 🌟 ここではウインドウを呼ばず、位置を記録するだけ！
+            # 🌟 タップした位置を記録して、一度画面をリフレッシュ！（確実なスイッチ）
             st.session_state.tapped_pos = pos
+            st.rerun()
 
-    # 🌟 with center_col: の外側（一番下）で、1回だけ確実にウインドウを呼ぶ！
+    # 🌟 記録が残っている間は、ずっとウインドウを表示し続ける！
     if st.session_state.tapped_pos is not None:
         input_result_dialog(st.session_state.tapped_pos)
-        st.session_state.tapped_pos = None  # 呼んだ直後にリセットするのが最大のコツ！
 
     st.divider()
     st.write("【インフィールド外・その他の結果】")

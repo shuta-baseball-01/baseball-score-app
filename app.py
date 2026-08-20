@@ -298,7 +298,7 @@ with tab2:
 
 st.divider()
 
-    left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
+left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
     with center_col:
         st.write("👇 打球が飛んだ方向をタップ！")

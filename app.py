@@ -188,7 +188,7 @@ def process_play(result_text, is_out=False):
     st.rerun()
 
 # 🌟 ウインドウを出す魔法の関数（完全版）
-@st.dialog("打球結果を入力", width="large")
+@st.experimental_dialog("打球結果を入力", width="large")
 def input_result_dialog(pos):
     st.success(f"📍 **{pos}** への打球ですね！結果は？")
     outs = []

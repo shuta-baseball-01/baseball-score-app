@@ -229,7 +229,7 @@ def input_result_dialog(pos):
         st.session_state.tapped_pos = None
         st.rerun()
         
-st.title("⚾ 草野球スコアキーパー")
+st.markdown("<h3 style='text-align: center; font-size: 22px; white-space: nowrap;'>⚾ 草野球スコアキーパ</h3>", unsafe_allow_html=True)
 tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "📊 打者成績", "⚾ 投手成績"])
 
 with tab1:

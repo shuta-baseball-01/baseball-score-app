@@ -348,11 +348,15 @@ with tab2:
                     elif angle <= 22: pos = "右中間（フェンス際）"
                     else: pos = "ライトオーバー"
 
-            # 🌟 ここが超重要！ st.rerun() は絶対に書かずに、記録だけする！
-            st.session_state.tapped_pos = pos
+            # 🌟 タップ位置を記録
+                st.session_state.tapped_pos = pos
 
-    # 🌟 with center_col の「外側（左端）」で、記録がある時だけウインドウを呼ぶ
-    if st.session_state.tapped_pos is not None:
+    # 🌟 ここから with center_col の外（左端に合わせる） 🌟
+    # 【確認用】今システムが何を記憶しているか画面に表示する！
+    st.write(f"👀 確認用センサー: {st.session_state.get('tapped_pos')}")
+
+    # 記録がある時だけウインドウを呼ぶ（エラーを防ぐ安全な書き方）
+    if st.session_state.get("tapped_pos") is not None:
         input_result_dialog(st.session_state.tapped_pos)
 
     st.divider()

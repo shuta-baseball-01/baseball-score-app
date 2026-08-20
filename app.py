@@ -296,16 +296,15 @@ with tab2:
             st.write("")
             st.button("決定", type="primary", use_container_width=True, on_click=apply_pinch_hitter)
 
-    st.divider()
-    
-    # 🌟 グラウンドを真ん中に大きく表示するために、カラムを少し調整
+st.divider()
+
     left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
-   with center_col:
+    with center_col:
         st.write("👇 打球が飛んだ方向をタップ！")
         value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
-        if value is not None and value != st.session_state.last_tap_value:
+        if value is not None and value != st.session_state.get("last_tap_value"):
             st.session_state.last_tap_value = value
             x, y = value['x'], value['y']
             hx, hy = 200, 350
@@ -348,14 +347,11 @@ with tab2:
                     elif angle <= 22: pos = "右中間（フェンス際）"
                     else: pos = "ライトオーバー"
 
-            # 🌟 タップ位置を記録
-                st.session_state.tapped_pos = pos
+            # 🌟 タップした位置を記録！
+            st.session_state.tapped_pos = pos
 
-    # 🌟 ここから with center_col の外（左端に合わせる） 🌟
-    # 【確認用】今システムが何を記憶しているか画面に表示する！
-    st.write(f"👀 確認用センサー: {st.session_state.get('tapped_pos')}")
-
-    # 記録がある時だけウインドウを呼ぶ（エラーを防ぐ安全な書き方）
+    # 🌟 ここが超重要！ with center_col の「外」に出すために、左端にピタッと合わせる！
+    st.write(f"👀 確認用: {st.session_state.get('tapped_pos')}")
     if st.session_state.get("tapped_pos") is not None:
         input_result_dialog(st.session_state.tapped_pos)
 

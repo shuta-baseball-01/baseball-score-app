@@ -229,7 +229,24 @@ def input_result_dialog(pos):
         st.session_state.tapped_pos = None
         st.rerun()
         
-st.markdown("<h3 style='text-align: center; font-size: 22px; white-space: nowrap;'>⚾ 草野球スコアキーパ</h3>", unsafe_allow_html=True)
+st.title("⚾ 草野球スコアキーパー")
+
+# 🌟 ここから追加：スマホ画面を綺麗にするCSS魔法
+st.markdown("""
+<style>
+    /* タイトルの改行（ーが落ちるの）を防いで中央に！ */
+    h1 {
+        font-size: 22px !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
+    /* グラウンドの画像を強制的にど真ん中に配置！ */
+    iframe {
+        display: block !important;
+        margin: 0 auto !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "📊 打者成績", "⚾ 投手成績"])
 
 with tab1:
@@ -304,8 +321,9 @@ st.markdown("<style>iframe {display: block !important; margin: 0 auto !important
 left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
 with center_col:
-    st.markdown("<div style='text-align: center;'>👇 打球が飛んだ方向をタップ！</div>", unsafe_allow_html=True)
-    value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
+        # 🌟 文字も強制的に真ん中寄せにする！
+        st.markdown("<p style='text-align: center; font-weight: bold;'>👇 打球が飛んだ方向をタップ！</p>", unsafe_allow_html=True)
+        value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
     if value is not None and value != st.session_state.get("last_tap_value"):
         st.session_state.last_tap_value = value

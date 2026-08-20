@@ -187,7 +187,7 @@ def process_play(result_text, is_out=False):
     st.session_state.show_sub_menu = False
     st.rerun()
 
-# 🌟 @st.dialog に変更し、キャンセルの動きをシンプルに！
+# 🌟 ウインドウを出す魔法の関数（完全版）
 @st.dialog("打球結果を入力", width="large")
 def input_result_dialog(pos):
     st.success(f"📍 **{pos}** への打球ですね！結果は？")
@@ -224,8 +224,9 @@ def input_result_dialog(pos):
     if col_err.button("エラー (失策)", key="dlg_err"): 
         process_play("エラー", is_out=False)
         
-    # 🌟 キャンセルはリロード（st.rerun）するだけで綺麗にウインドウが閉じるよ！
+    # 🌟 キャンセルした時に「タップ記録を消して」ウインドウを閉じる！
     if col_cancel.button("↩️ キャンセル（やり直す）", key="dlg_cancel"):
+        st.session_state.tapped_pos = None
         st.rerun()
         
 st.title("⚾ 草野球スコアキーパー")

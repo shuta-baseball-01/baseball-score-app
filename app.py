@@ -296,7 +296,7 @@ with tab2:
             st.write("")
             st.button("決定", type="primary", use_container_width=True, on_click=apply_pinch_hitter)
 
-　　　　st.divider()
+       st.divider()
 
 　　　　left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 

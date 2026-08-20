@@ -35,6 +35,7 @@ st.markdown("""
     border: 2px solid #E0E0E0 !important;
     box-shadow: 0px 4px 0px #B0BEC5 !important;
     transition: all 0.1s !important;
+    color: #333333 !important; /* 🌟 ココを1行追加！文字をずっと濃いグレー（黒）に固定する！ */
 }
 
 /* ② ボタンを押した時に「ポチッ」と沈む動き */

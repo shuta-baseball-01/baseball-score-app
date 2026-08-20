@@ -298,10 +298,13 @@ with tab2:
 
 st.divider()
 
+# 🌟 スマホでも画像と文字を真ん中に強制的に寄せる魔法のCSS
+st.markdown("<style>iframe {display: block !important; margin: 0 auto !important;}</style>", unsafe_allow_html=True)
+
 left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
 with center_col:
-    st.write("👇 打球が飛んだ方向をタップ！")
+    st.markdown("<div style='text-align: center;'>👇 打球が飛んだ方向をタップ！</div>", unsafe_allow_html=True)
     value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
     if value is not None and value != st.session_state.get("last_tap_value"):

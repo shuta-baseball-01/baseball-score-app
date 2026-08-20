@@ -301,7 +301,7 @@ with tab2:
     # 🌟 グラウンドを真ん中に大きく表示するために、カラムを少し調整
     left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
-    with center_col:
+   with center_col:
         st.write("👇 打球が飛んだ方向をタップ！")
         value = streamlit_image_coordinates("field.png", key="baseball_field", use_column_width=True)
 
@@ -348,11 +348,10 @@ with tab2:
                     elif angle <= 22: pos = "右中間（フェンス際）"
                     else: pos = "ライトオーバー"
 
-            # 🌟 タップした位置を記録して、一度画面をリフレッシュ！（確実なスイッチ）
+            # 🌟 ここが超重要！ st.rerun() は絶対に書かずに、記録だけする！
             st.session_state.tapped_pos = pos
-            st.rerun()
 
-    # 🌟 記録が残っている間は、ずっとウインドウを表示し続ける！
+    # 🌟 with center_col の「外側（左端）」で、記録がある時だけウインドウを呼ぶ
     if st.session_state.tapped_pos is not None:
         input_result_dialog(st.session_state.tapped_pos)
 

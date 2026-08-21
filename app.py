@@ -422,15 +422,6 @@ st.write(f"👀 確認用: {st.session_state.get('tapped_pos')}")
 if st.session_state.get("tapped_pos") is not None:
     input_result_dialog(st.session_state.tapped_pos)
         
-    st.divider()
-    st.write("【インフィールド外・その他の結果】")
-    b1, b2, b3, b4, b5 = st.columns(5)
-    if b1.button("三振"): process_play("三振", is_out=True)
-    if b2.button("四球"): process_play("四球", is_out=False)
-    if b3.button("死球"): process_play("死球", is_out=False)
-    if b4.button("邪飛"): process_play("邪飛", is_out=True)
-    if b5.button("振り逃げ"): process_play("振り逃げ", is_out=False)
-
 with tab3:
         st.header("成績確認（打者プレイログ）")
         

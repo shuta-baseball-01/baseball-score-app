@@ -222,17 +222,37 @@ def input_result_dialog(pos):
     elif "ファースト" in pos: outs, hits = ["一ゴロ", "一直", "一飛","併殺打"], ["右安", "内野安打"]
     else: outs, hits = ["ゴロ", "ライナー", "フライ"], ["単打", "二塁打", "三塁打", "本塁打"]
 
-    # 🌟 ここに追加！タップした場所に応じて、自動で犠打や犠飛のボタンを足す！
+    # 🌟 ここから変更！アウトを3つのグループに自動で仕分ける！
+    goro_liners = []
+    flies = []
+    for res in outs:
+        if "飛" in res or res == "フライ":
+            flies.append(res)
+        else:
+            goro_liners.append(res)
+            
+    # 犠打・犠飛のグループ
     if any(w in pos for w in ["レフト", "センター", "ライト", "左中間", "右中間"]):
-        outs.append("犠飛")
+        sacs = ["犠飛"]
     else:
-        outs.extend(["犠打", "犠飛"])
+        sacs = ["犠打", "犠飛"]
 
-    st.write("⚾ **アウト（凡打）**")
-    out_cols = st.columns(3)
-    for i, out_result in enumerate(outs):
-        if out_cols[i % 3].button(out_result, key=f"dlg_out_{out_result}"): 
-            process_play(out_result, is_out=True)
+    # 🌟 ここから画面に表示していくよ！
+    st.write("⚾ **ゴロ・ライナー**")
+    c_gl = st.columns(3)
+    for i, res in enumerate(goro_liners):
+        if c_gl[i % 3].button(res, key=f"dlg_out_{res}"): process_play(res, is_out=True)
+
+    if flies: # フライがある場合だけ表示
+        st.write("⚾ **フライ**")
+        c_fl = st.columns(3)
+        for i, res in enumerate(flies):
+            if c_fl[i % 3].button(res, key=f"dlg_out_{res}"): process_play(res, is_out=True)
+
+    st.write("🎯 **犠打・犠飛**")
+    c_sac = st.columns(3)
+    for i, res in enumerate(sacs):
+        if c_sac[i % 3].button(res, key=f"dlg_out_{res}"): process_play(res, is_out=True)
 
     st.write("💥 **ヒット（安打）**")
     hit_cols = st.columns(3)

@@ -210,9 +210,9 @@ def input_result_dialog(pos):
     hits = []
 
     if any(w in pos for w in ["レフト", "センター", "ライト", "左中間", "右中間"]):
-        if "レフト" in pos or "左中間" in pos: outs, hits = ["左直", "左飛"], ["左安", "左越二塁打", "左越三塁打", "本塁打"]
-        elif "センター" in pos: outs, hits = ["中直", "中飛"], ["中安", "中越二塁打", "中越三塁打", "本塁打"]
-        elif "ライト" in pos or "右中間" in pos: outs, hits = ["右直", "右飛"], ["右安", "右越二塁打", "右越三塁打", "本塁打"]
+        if "レフト" in pos or "左中間" in pos: outs, hits = ["左直", "左飛"], ["左安", "左越二塁打", "左越三塁打", "左本塁打"]
+        elif "センター" in pos: outs, hits = ["中直", "中飛"], ["中安", "中越二塁打", "中越三塁打", "中本塁打"]
+        elif "ライト" in pos or "右中間" in pos: outs, hits = ["右直", "右飛"], ["右安", "右越二塁打", "右越三塁打", "右本塁打"]
     elif "キャッチャー" in pos: outs, hits = ["捕ゴロ", "捕直", "捕飛","併殺打"], ["内野安打"]
     elif "ピッチャー" in pos: outs, hits = ["投ゴロ", "投直", "投飛","併殺打"], ["内野安打", "中安"]
     elif "ショート" in pos: outs, hits = ["遊ゴロ", "三ゴロ", "遊直", "三直", "遊飛", "三飛","併殺打"], ["左安", "内野安打"]
@@ -238,28 +238,43 @@ def input_result_dialog(pos):
         sacs = ["犠打", "犠飛"]
 
     # 🌟 ここから画面に表示していくよ！
-    st.write("⚾ **ゴロ・ライナー**")
-    c_gl = st.columns(3)
-    for i, res in enumerate(goro_liners):
-        if c_gl[i % 3].button(res, key=f"dlg_out_{res}"): process_play(res, is_out=True)
+    # （スマホでも順番が崩れないように「横3つの行を毎回新しく作る」魔法！）
+    
+    if goro_liners:
+        st.write("⚾ **ゴロ・ライナー**")
+        for i in range(0, len(goro_liners), 3):
+            cols = st.columns(3)
+            for j in range(3):
+                if i + j < len(goro_liners):
+                    res = goro_liners[i + j]
+                    if cols[j].button(res, key=f"dlg_gl_{res}"): process_play(res, is_out=True)
 
-    if flies: # フライがある場合だけ表示
+    if flies:
         st.write("⚾ **フライ**")
-        c_fl = st.columns(3)
-        for i, res in enumerate(flies):
-            if c_fl[i % 3].button(res, key=f"dlg_out_{res}"): process_play(res, is_out=True)
+        for i in range(0, len(flies), 3):
+            cols = st.columns(3)
+            for j in range(3):
+                if i + j < len(flies):
+                    res = flies[i + j]
+                    if cols[j].button(res, key=f"dlg_fl_{res}"): process_play(res, is_out=True)
 
-    st.write("🎯 **犠打・犠飛**")
-    c_sac = st.columns(3)
-    for i, res in enumerate(sacs):
-        if c_sac[i % 3].button(res, key=f"dlg_out_{res}"): process_play(res, is_out=True)
+    if sacs:
+        st.write("🎯 **犠打・犠飛**")
+        for i in range(0, len(sacs), 3):
+            cols = st.columns(3)
+            for j in range(3):
+                if i + j < len(sacs):
+                    res = sacs[i + j]
+                    if cols[j].button(res, key=f"dlg_sac_{res}"): process_play(res, is_out=True)
 
-    st.write("💥 **ヒット（安打）**")
-    hit_cols = st.columns(3)
-    for i, hit_result in enumerate(hits):
-        if hit_cols[i % 3].button(hit_result, key=f"dlg_hit_{hit_result}", type="primary"): 
-            process_play(hit_result, is_out=False)
-
+    if hits:
+        st.write("💥 **ヒット（安打）**")
+        for i in range(0, len(hits), 3):
+            cols = st.columns(3)
+            for j in range(3):
+                if i + j < len(hits):
+                    res = hits[i + j]
+                    if cols[j].button(res, key=f"dlg_hit_{res}", type="primary"): process_play(res, is_out=False)
     st.write("⚠️ **その他**")
     col_err, col_cancel = st.columns(2)
     if col_err.button("エラー (失策)", key="dlg_err"): 

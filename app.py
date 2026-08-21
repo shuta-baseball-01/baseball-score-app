@@ -124,7 +124,7 @@ if 'score' not in st.session_state: st.session_state.score = 0
 if 'show_sub_menu' not in st.session_state: st.session_state.show_sub_menu = False
 
 if 'num_batters' not in st.session_state: st.session_state.num_batters = 9
-default_names = ["しゅーた", "田中", "鈴木", "高橋", "佐藤", "伊藤", "渡辺", "山本", "中村", "選手A", "選手B", "選手C", "選手D", "選手E", "選手F"]
+default_names = ["なべ", "しゅーた", "たか", "きくち", "しんや", "こん", "よーへい", "しょーご", "たいき", "選手A", "選手B", "選手C", "選手D", "選手E", "選手F"]
 for i in range(15):
     if f"input_lineup_{i}" not in st.session_state:
         st.session_state[f"input_lineup_{i}"] = default_names[i]

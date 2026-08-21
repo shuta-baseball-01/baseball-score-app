@@ -73,22 +73,24 @@ transform-origin: center top !important; /* 🌟 左上(top left)から真ん中
 def create_and_save_field():
     img = Image.new("RGBA", (400, 400), "#2e8b57")
     draw = ImageDraw.Draw(img)
-    draw.polygon([(200, 350), (100, 250), (200, 150), (300, 250)], fill="#d2b48c")
-    draw.line([(200, 350), (0, 150)], fill="white", width=3)
-    draw.line([(200, 350), (400, 150)], fill="white", width=3)
-    draw.rectangle([(195, 345), (205, 355)], fill="white")
-    draw.rectangle([(295, 245), (305, 255)], fill="white")
-    draw.rectangle([(195, 145), (205, 155)], fill="white")
-    draw.rectangle([(95, 245), (105, 255)], fill="white")
+    # 🌟 ホームベースを(200, 380)まで下げて内野を広く！
+    draw.polygon([(200, 380), (80, 260), (200, 140), (320, 260)], fill="#d2b48c")
+    draw.line([(200, 380), (0, 180)], fill="white", width=3)
+    draw.line([(200, 380), (400, 180)], fill="white", width=3)
+    
+    draw.rectangle([(195, 375), (205, 385)], fill="white")
+    draw.rectangle([(315, 255), (325, 265)], fill="white")
+    draw.rectangle([(195, 135), (205, 145)], fill="white")
+    draw.rectangle([(75, 255), (85, 265)], fill="white")
 
-    hx, hy = 200, 350
-    radiuses = [40, 110, 250]
+    hx, hy = 200, 380
+    radiuses = [45, 130, 270] # 距離感も少し拡大
     for r in radiuses:
         draw.arc([(hx-r, hy-r), (hx+r, hy+r)], start=225, end=315, fill="blue", width=1)
 
     r3_points = []
     for a in range(-45, 46):
-        r = 190 + 35 * math.cos(math.radians(a * 2))
+        r = 210 + 35 * math.cos(math.radians(a * 2)) # 内野の膨らみも調整
         rad = math.radians(a - 90)
         px = hx + r * math.cos(rad)
         py = hy + r * math.sin(rad)
@@ -98,7 +100,7 @@ def create_and_save_field():
     infield_angles = [-30, -8, 8, 30]
     for a in infield_angles:
         rad = math.radians(a - 90)
-        r = 190 + 35 * math.cos(math.radians(a * 2))
+        r = 210 + 35 * math.cos(math.radians(a * 2))
         ex = hx + r * math.cos(rad)
         ey = hy + r * math.sin(rad)
         draw.line([(hx, hy), (ex, ey)], fill="red", width=1)
@@ -106,16 +108,16 @@ def create_and_save_field():
     outfield_angles = [-22, -12, 12, 22]
     for a in outfield_angles:
         rad = math.radians(a - 90)
-        r = 190 + 35 * math.cos(math.radians(a * 2))
+        r = 210 + 35 * math.cos(math.radians(a * 2))
         sx = hx + r * math.cos(rad)
         sy = hy + r * math.sin(rad)
         ex = hx + 400 * math.cos(rad)
         ey = hy + 400 * math.sin(rad)
         draw.line([(sx, sy), (ex, ey)], fill="red", width=1)
 
-    img.save("field.png")
+    img.save("field_v2.png") # 🌟 名前を新しくする！
 
-if not os.path.exists("field.png"):
+if not os.path.exists("field_v2.png"):
     create_and_save_field()
 
 # --- 🧠 状態管理 ---

@@ -256,24 +256,22 @@ st.markdown("""
         margin-bottom: 20px;
     }
     
-    /* ② スマホ画面でも、グラウンドの左右の「見えない壁」を無理やり維持して真ん中に挟み込む！ */
+/* ② スマホ画面でも、グラウンドの左右の「見えない壁」を無理やり維持して真ん中に挟み込む！ */
     @media (max-width: 640px) {
         /* グラウンドがある横並びブロックを強制的に横並び（row）にする */
         div[data-testid="stHorizontalBlock"]:has(iframe) {
             flex-direction: row !important;
         }
-        /* 左右の壁（1番目と3番目の枠）を15%の幅で維持する */
+        /* 🌟 左右の壁（1番目と3番目の枠）をスマホでは完全に消して広くする！ */
         div[data-testid="stHorizontalBlock"]:has(iframe) > div:nth-child(1),
         div[data-testid="stHorizontalBlock"]:has(iframe) > div:nth-child(3) {
-            display: block !important;
-            width: 15% !important;
-            flex: 1 1 15% !important;
+            display: none !important;
         }
-        /* 真ん中のグラウンドを70%の幅で中央に配置する */
+        /* 🌟 真ん中のグラウンドを100%の幅で画面いっぱいに配置する！ */
         div[data-testid="stHorizontalBlock"]:has(iframe) > div:nth-child(2) {
             display: block !important;
-            width: 70% !important;
-            flex: 1 1 70% !important;
+            width: 100% !important;
+            flex: 1 1 100% !important;
         }
     }
     
@@ -363,7 +361,7 @@ with center_col:
         # 🌟 文字も強制的に真ん中寄せにする！
         st.markdown("<p style='text-align: center; font-weight: bold;'>👇 打球が飛んだ方向をタップ！</p>", unsafe_allow_html=True)
 # 🌟 さっき新しく作った field_v2.png を読み込む！
-        value = streamlit_image_coordinates("field_v2.png", key="baseball_field", width=380)
+        value = streamlit_image_coordinates("field_v2.png", key="baseball_field", use_column_width=True)
 
         if value is not None and value != st.session_state.get("last_tap_value"):
             st.session_state.last_tap_value = value

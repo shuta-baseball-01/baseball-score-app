@@ -401,18 +401,21 @@ left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 with center_col:
         # 🌟 文字も強制的に真ん中寄せにする！
         st.markdown("<p style='text-align: center; font-weight: bold;'>👇 打球が飛んだ方向をタップ！</p>", unsafe_allow_html=True)
-# 🌟 さっき新しく作った field_v4.png を読み込む！
-        value = streamlit_image_coordinates("field_v4.png", key="baseball_field", use_column_width=True)
+        # 🌟 さっき新しく作った field_v4.png を読み込む！
+        value = streamlit_image_coordinates("field_v4.png", key="baseball_field", width=340)
 
         if value is not None and value != st.session_state.get("last_tap_value"):
             st.session_state.last_tap_value = value
-            x, y = value['x'], value['y']
-            hx, hy = 200, 380 # 🌟 ホームベースの基準も350から380に下げる！
+            # 🌟 ② ここが最大の解決策！縮小された座標(340)を、計算用のサイズ(400)に引き伸ばして正確に戻す魔法！
+            x = value['x'] * (400 / 340)
+            y = value['y'] * (400 / 340)
+            
+            hx, hy = 200, 380
             dx, dy = x - hx, hy - y
             distance = math.sqrt(dx**2 + dy**2)
             angle = math.degrees(math.atan2(dx, dy)) if dy != 0 else 90
-            dynamic_r3 = 210 + 35 * math.cos(math.radians(angle * 2)) # 🌟 190から210に変更
-
+            dynamic_r3 = 210 + 35 * math.cos(math.radians(angle * 2))
+            
             pos = "エラー"
             if dy < 0: pos = "バックネット裏"
             elif angle < -45 or angle > 45: pos = "ファウルゾーン"

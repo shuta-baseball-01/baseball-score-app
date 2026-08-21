@@ -196,6 +196,23 @@ def process_play(result_text, is_out=False):
 @st.experimental_dialog("打球結果を入力", width="large")
 def input_result_dialog(pos):
     st.success(f"📍 **{pos}** への打球ですね！結果は？")
+
+    # 🌟 NEW: ファウルゾーン・バックネット裏を押した時の特別メニュー！
+    if pos in ["ファウルゾーン", "バックネット裏"]:
+        st.write("⚾ **ファウル・その他の結果**")
+        c1, c2, c3 = st.columns(3)
+        if c1.button("邪飛", key="dlg_foul_fly"): process_play("邪飛", is_out=True)
+        if c2.button("三振", key="dlg_strikeout"): process_play("三振", is_out=True)
+        if c3.button("四球", key="dlg_walk"): process_play("四球", is_out=False)
+        
+        c4, c5, c6 = st.columns(3)
+        if c4.button("死球", key="dlg_hbp"): process_play("死球", is_out=False)
+        if c5.button("振り逃げ", key="dlg_furinige"): process_play("振り逃げ", is_out=False)
+        if c6.button("↩️ キャンセル", key="dlg_cancel_foul"): 
+            st.session_state.tapped_pos = None
+            st.rerun()
+        return # 🌟 ここでストップして、下のヒットボタンなどを出さない！
+
     outs = []
     hits = []
 

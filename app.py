@@ -222,6 +222,12 @@ def input_result_dialog(pos):
     elif "ファースト" in pos: outs, hits = ["一ゴロ", "一直", "一飛","併殺打"], ["右安", "内野安打"]
     else: outs, hits = ["ゴロ", "ライナー", "フライ"], ["単打", "二塁打", "三塁打", "本塁打"]
 
+    # 🌟 ここに追加！タップした場所に応じて、自動で犠打や犠飛のボタンを足す！
+    if any(w in pos for w in ["レフト", "センター", "ライト", "左中間", "右中間"]):
+        outs.append("犠飛")
+    else:
+        outs.extend(["犠打", "犠飛"])
+
     st.write("⚾ **アウト（凡打）**")
     out_cols = st.columns(3)
     for i, out_result in enumerate(outs):
@@ -475,7 +481,7 @@ with tab3:
                         if "安" in res or "二塁打" in res or "三塁打" in res or "本塁打" in res or res == "単打":
                             st_ab += 1
                             st_hits += 1
-                        elif res in ["四球", "死球", "四死球"]:
+                        elif res in ["四球", "死球", "四死球", "犠打", "犠飛"]:
                             pass
                         else:
                             st_ab += 1

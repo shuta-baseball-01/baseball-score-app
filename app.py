@@ -90,7 +90,7 @@ def create_and_save_field():
         r3_points.append((px, py))
     draw.line(r3_points, fill="blue", width=1)
 
-    infield_angles = [-30, -8, 8, 30]
+    infield_angles = [-26, -8, 8, 26]
     for a in infield_angles:
         rad = math.radians(a - 90)
         r = 210 + 35 * math.cos(math.radians(a * 2))
@@ -108,9 +108,9 @@ def create_and_save_field():
         ey = hy + 400 * math.sin(rad)
         draw.line([(sx, sy), (ex, ey)], fill="red", width=1)
 
-    img.save("field_v2.png") # 🌟 名前を新しくする！
+    img.save("field_v4.png") # 🌟 名前を新しくする！
 
-if not os.path.exists("field_v2.png"):
+if not os.path.exists("field_v4.png"):
     create_and_save_field()
 
 # --- 🧠 状態管理 ---
@@ -401,8 +401,8 @@ left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 with center_col:
         # 🌟 文字も強制的に真ん中寄せにする！
         st.markdown("<p style='text-align: center; font-weight: bold;'>👇 打球が飛んだ方向をタップ！</p>", unsafe_allow_html=True)
-# 🌟 さっき新しく作った field_v2.png を読み込む！
-        value = streamlit_image_coordinates("field_v2.png", key="baseball_field", use_column_width=True)
+# 🌟 さっき新しく作った field_v4.png を読み込む！
+        value = streamlit_image_coordinates("field_v4.png", key="baseball_field", use_column_width=True)
 
         if value is not None and value != st.session_state.get("last_tap_value"):
             st.session_state.last_tap_value = value
@@ -419,14 +419,14 @@ with center_col:
             else:
                 if distance < 40: pos = "キャッチャー周辺"
                 elif 40 <= distance < 110:
-                    if angle < -30: pos = "サード前"
-                    elif angle <= 30: pos = "ピッチャー周辺"
+                    if angle < -26: pos = "サード前"
+                    elif angle <= 26: pos = "ピッチャー周辺"
                     else: pos = "ファースト前"
                 elif 110 <= distance < dynamic_r3:
-                    if angle < -30: pos = "サード周辺"
+                    if angle < -26: pos = "サード周辺"
                     elif angle < -8: pos = "ショート周辺"
                     elif angle <= 8: pos = "二遊間周辺"
-                    elif angle <= 30: pos = "セカンド周辺"
+                    elif angle <= 26: pos = "セカンド周辺"
                     else: pos = "ファースト周辺"
                 elif dynamic_r3 <= distance < 250:
                     if angle < -22: pos = "レフト前（サード後方）"

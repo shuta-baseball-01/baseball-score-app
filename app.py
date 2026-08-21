@@ -58,13 +58,6 @@ st.markdown("""
     transform: translateY(4px) !important;
 }
 
-/* ⑤ スマホではみ出さないように、グラウンド全体を85%に縮小表示する */
-iframe[title="streamlit_image_coordinates.streamlit_image_coordinates"] {
-    transform: scale(1.0);
-transform-origin: center top !important; /* 🌟 左上(top left)から真ん中(center)に変更！ */
-    margin: 0 auto !important; /* 🌟 念のため中央揃えの魔法も追加！ */
-    display: block !important;
-}
 </style>
 """, unsafe_allow_html=True)
 # 🌟 追加ここまで

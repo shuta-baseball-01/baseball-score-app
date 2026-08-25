@@ -181,6 +181,20 @@ def process_play(result_text, is_out=False):
             st.toast(f"🔄 3アウト！次は {st.session_state.inning}回{st.session_state.half} の攻撃です！", icon="🔄")
 
     st.session_state.batter_idx = (st.session_state.batter_idx + 1) % st.session_state.num_batters
+
+    # 🌟🌟 NEW: スリープ対策の「自動セーブ機能」をここで発動！ 🌟🌟
+    try:
+        status_sheet = get_sheet().spreadsheet.worksheet("試合状況")
+        lineup_data = [st.session_state[f"input_lineup_{i}"] for i in range(15)]
+        save_data = [
+            str(st.session_state.game_date), st.session_state.game_name,
+            st.session_state.inning, st.session_state.half, st.session_state.outs,
+            st.session_state.score, st.session_state.batter_idx, st.session_state.num_batters
+        ] + lineup_data
+        status_sheet.append_row(save_data)
+    except Exception as e:
+        pass # もしエラーが出ても、試合の記録進行を止めないようにスルーする
+    
     st.session_state.tapped_pos = None
     st.session_state.show_sub_menu = False
     st.rerun()
@@ -329,6 +343,59 @@ tab1, tab2, tab3, tab4 = st.tabs(["📋 試合設定", "🏟️ 試合記録", "
 
 with tab1:
     st.header("試合設定")
+    # 🌟🌟 NEW: スリープ対策のセーブ＆ロード機能！ 🌟🌟
+    st.info("💡 スマホがスリープしてリセットされたら、左の「ロード」ボタンを押してね！")
+    col_load, col_save = st.columns(2)
+    
+    # 【ロード機能】スプレッドシートから記憶を引っ張り出す
+    if col_load.button("🔄 最新の状況をロード", type="primary", use_container_width=True):
+        try:
+            status_sheet = get_sheet().spreadsheet.worksheet("試合状況")
+            all_data = status_sheet.get_all_values()
+            
+            today_str = str(st.session_state.game_date)
+            target_game = st.session_state.game_name
+            
+            latest_save = None
+            for row in all_data:
+                if len(row) >= 8 and row[0] == today_str and row[1] == target_game:
+                    latest_save = row
+                    
+            if latest_save:
+                st.session_state.inning = int(latest_save[2])
+                st.session_state.half = latest_save[3]
+                st.session_state.outs = int(latest_save[4])
+                st.session_state.score = int(latest_save[5])
+                st.session_state.batter_idx = int(latest_save[6])
+                st.session_state.num_batters = int(latest_save[7])
+                
+                for i in range(15):
+                    if len(latest_save) > 8 + i:
+                        st.session_state[f"input_lineup_{i}"] = latest_save[8 + i]
+                        
+                st.success("✅ オーダーもイニングも、完璧に思い出したよ！")
+                st.rerun()
+            else:
+                st.warning("まだ今日のセーブデータがないみたい！")
+        except Exception as e:
+            st.error(f"ロードに失敗したよ: {e}")
+
+    # 【手動セーブ機能】スタメン変更直後などに念のため押す用
+    if col_save.button("💾 今の設定を手動でセーブ", use_container_width=True):
+        try:
+            status_sheet = get_sheet().spreadsheet.worksheet("試合状況")
+            lineup_data = [st.session_state[f"input_lineup_{i}"] for i in range(15)]
+            save_data = [
+                str(st.session_state.game_date), st.session_state.game_name,
+                st.session_state.inning, st.session_state.half, st.session_state.outs,
+                st.session_state.score, st.session_state.batter_idx, st.session_state.num_batters
+            ] + lineup_data
+            status_sheet.append_row(save_data)
+            st.success("✅ 手動セーブ完了！")
+        except Exception as e:
+            st.error(f"セーブ失敗: {e}")
+
+    st.divider()    
     st.session_state.game_date = st.date_input("📅 試合日")
     # 🌟🌟 NEW: 試合名の入力欄を追加 🌟🌟
     if "game_name" not in st.session_state:

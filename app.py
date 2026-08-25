@@ -17,7 +17,7 @@ def get_sheet():
     gc = gspread.authorize(creds)
     # ⚠️ ここがさっきスクショで見えていた、しゅーたのシートID！
     SPREADSHEET_ID = "1BFNchRRwxRgYkeDPfdL-eiepJV5afv5l3ovWot6CS9s"
-    return gc.open_by_key(SPREADSHEET_ID).sheet1
+    return gc.open_by_key(SPREADSHEET_ID).worksheet("打者記録")
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image, ImageDraw
 import os
